@@ -45,6 +45,14 @@ fi
 sed -e 's/\xc4\x87/\xc3\xa7/g' \
     -e 's/\xc4\x86/\xc3\x87/g' <"${system_compose}" >"${USER_COMPOSE}"
 
+
+# 0 = disabled : Disable the 'fn' key. Pressing 'fn'+'F8' will behave like you only press 'F8'
+# 1 = fkeyslast : Function keys are used as last key. Pressing 'F8' key will act as a special key. Pressing 'fn'+'F8' will behave like a F8.
+# 2 = fkeysfirst : Function keys are used as first key. Pressing 'F8' key will behave like a F8. Pressing 'fn'+'F8' will act as special key (play/pause).
+echo >&2 "Fixing fn keys to work as it should be (f keys first)"
+echo 0 | sudo tee /sys/module/hid_apple/parameters/fnmode
+echo "options hid_apple fnmode=2" | sudo tee -a /etc/modprobe.d/hid_apple.conf
+
 cat <<EOM
 ${BOLD}System configuration changed.${RESET}
 
